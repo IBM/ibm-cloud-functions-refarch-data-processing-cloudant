@@ -32,7 +32,7 @@ function install() {
 
   echo "Creating trigger to fire events when data is inserted"
   bx wsk trigger create image-uploaded \
-    --feed "/_/$CLOUDANT_INSTANCE/changes" \
+    --feed "/_/Bluemix_${CLOUDANT_INSTANCE}_Credentials-1/changes" \
     --param dbname "$CLOUDANT_DATABASE"
 
   echo "Creating the package for the actions"
@@ -44,10 +44,12 @@ function install() {
     --param CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD" \
     --param CLOUDANT_DATABASE "$CLOUDANT_DATABASE"
 
+  echo "Creating action to respond to database insertions"
+  bx wsk action create data-processing-cloudant/write-from-cloudant ../runtimes/nodejs/actions/write-from-cloudant.js
 
   echo "Creating sequence that ties database read to handling action"
   bx wsk action create data-processing-cloudant/write-from-cloudant-sequence \
-    --sequence /_/$CLOUDANT_INSTANCE/read,data-processing-cloudant/write-from-cloudant
+    --sequence /_/Bluemix_${CLOUDANT_INSTANCE}_Credentials-1/read,data-processing-cloudant/write-from-cloudant
 
   echo "Creating rule that maps database change trigger to sequence"
   bx wsk rule create echo-images image-uploaded data-processing-cloudant/write-from-cloudant-sequence
