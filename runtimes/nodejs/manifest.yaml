@@ -29,7 +29,7 @@ packages:
             # Trigger named "image-uploaded"
             # Creating trigger to fire events when data is inserted
             image-uploaded:
-                source: Bluemix_openwhisk-cloudant_Credentials-1/changes
+                feed: Bluemix_openwhisk-cloudant_Credentials-1/changes
                 inputs:
                     dbname: $CLOUDANT_DATABASE
         actions:
