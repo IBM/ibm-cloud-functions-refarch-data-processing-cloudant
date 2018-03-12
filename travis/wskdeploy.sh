@@ -41,7 +41,7 @@ cd runtimes/nodejs # Or runtimes/[php|python|swift]
 ./wskdeploy
 
 # Test after installing prereqs
-apt-get install jq
+sudo apt-get install jq
 
 bx wsk action invoke --blocking --result data-processing-cloudant/write-to-cloudant
 
