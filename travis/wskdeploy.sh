@@ -47,7 +47,7 @@ sudo apt-get install jq
 
 bx wsk action invoke --blocking --result data-processing-cloudant/write-to-cloudant
 
-LAST_ACTIVATION=`bx wsk activation list | head -2 | tail -1 | awk '{ print $1 }'`
+LAST_ACTIVATION=`bx wsk activation list | grep 'write-from-cloudant' | head -1 | awk '{ print $1 }'`
 echo $LAST_ACTIVATION
 
 IBM_LOGO=`bx wsk activation result $LAST_ACTIVATION | jq -r '._id'`
