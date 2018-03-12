@@ -39,5 +39,21 @@ bx wsk package refresh
 mv wskdeploy runtimes/nodejs/
 cd runtimes/nodejs # Or runtimes/[php|python|swift]
 ./wskdeploy
-sleep 5
-./wskdeploy undeploy
+
+# Test after installing prereqs
+apt-get install jq
+
+bx wsk action invoke --blocking --result data-processing-cloudant/write-to-cloudant
+
+LAST_ACTIVATION=`bx wsk activation list | head -2 | tail -1 | awk '{ print $1 }'`
+IBM_LOGO=`bx wsk activation result $LAST_ACTIVATION | jq -r '._id'`
+if [[ $IBM_LOGO == IBM_logo* ]]
+then
+    echo "Found the image we were expecting"
+    ./wskdeploy undeploy
+else
+    echo "Did not find the IBM_logo"
+    bx wsk activation list
+    ./wskdeploy undeploy
+    exit -1
+fi
