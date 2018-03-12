@@ -2,25 +2,25 @@
 
 [![Build Status](https://travis-ci.org/IBM/ibm-cloud-functions-refarch-data-processing-cloudant.svg?branch=master)](https://travis-ci.org/IBM/ibm-cloud-functions-refarch-data-processing-cloudant)
 
-This project shows how serverless, event-driven architectures built with IBM Cloud Functions can execute code in response to changes in a database. No code runs until change events arrive from the IBM Cloudant (powered by Apache CouchDB) topic. When that happens, function instances are started to match the load needed by the database change events exactly.
+This project deploys a reference architecture with IBM Cloud Functions to execute code in response to changes in a database. No code runs until change events arrive from IBM Cloudant (powered by Apache CouchDB). When that happens, function instances are started and automatically scale to match the load needed to process the database change events.
 
-In addition to using cloud resources efficiently, this means that developers can build and deploy applications more quickly. You can learn more about the benefits of building a serverless architecture for this use case in the accompanying IBM Code Pattern (TBD).
+You can learn more about the benefits of building a serverless architecture for this use case in the accompanying IBM Code Pattern (TBD).
 
 Deploy this reference architecture:
 
 - Through the [IBM Cloud Functions user interface](#deploy-through-the-ibm-cloud-functions-console-user-interface).
 - Or by using [command line tools on your own system](#deploy-using-the-wskdeploy-command-line-tool).
 
-If you haven't already, sign up for an IBM Cloud account and go to the [Cloud Functions dashboard](https://console.bluemix.net/openwhisk/) to explore other [reference architecture templates](https://github.com/topics/ibm-cloud-functions-refarch) and download command line tools, if needed.
+If you haven't already, sign up for an IBM Cloud account then go to the [Cloud Functions dashboard](https://console.bluemix.net/openwhisk/) to explore other [reference architecture templates](https://github.com/topics/ibm-cloud-functions-refarch) and download command line tools, if needed.
 
 ## Included components
 
 - IBM Cloud Functions (powered by Apache OpenWhisk)
 - IBM Cloudant (powered by Apache CouchDB)
 
-The application demonstrates two IBM Cloud Functions (based on Apache OpenWhisk) that read and write messages with IBM Message Hub (based on Apache Kafka). The use case demonstrates how actions work with data services and execute logic in response to message events.
+The application deploys two IBM Cloud Functions (based on Apache OpenWhisk) that read and write data to IBM Cloudant (powered by Apache CouchDB). This demonstrates how actions work with data services and execute logic in response to data change events.
 
-One function, or action, is triggered by message streams of one or more data records. These records are piped to another action in a sequence (a way to link actions declaratively in a chain). The second action aggregates the message and posts a transformed summary message to another topic.
+One function, or action, posts a data record to Cloudant when invoked manually. A built in Cloudant package feed receives the change, which in turn triggers  a sequence of actions (a way to link actions declaratively in a chain) to read and log the data that was received.
 
 ![Sample Architecture](img/refarch-data-processing-cloudant.png)
 
@@ -28,7 +28,7 @@ One function, or action, is triggered by message streams of one or more data rec
 
 Choose "[Start Creating](https://console.bluemix.net/openwhisk/create)" and select "Deploy template" then "Cloudant Events" from the list. A wizard will then take you through configuration and connection to event sources step-by-step.
 
-Behind the scenes, the UI uses `wskdeploy`, which you can also use directly from the CLI by following the steps in the next section.
+Behind the scenes, the UI uses the `wskdeploy` tool, which you can also use directly from the CLI by following the steps in the next section.
 
 ## Deploy using the `wskdeploy` command line tool
 
